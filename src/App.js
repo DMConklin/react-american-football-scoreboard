@@ -11,6 +11,29 @@ function App() {
   const [minutes, setMinutes] = useState(15);
   const [quarter, setQuarter] = useState(1);
   const [down, setDown] = useState(1);
+  const [ballOn, setBallOn] = useState(50);
+  const [toGo, setToGo] = useState(10);
+
+  const enterBallOn = () => {
+    let given = prompt("Enter Ball On"); 
+    while (given > 50 || given < 1 || given % 1 !== 0) {
+      given = prompt('Please enter a whole number 1 - 50');
+    }
+    setBallOn(given);
+  }
+
+ const enterToGo = () => {
+    let givenToGo = prompt('Enter To Go');
+    while (givenToGo === '') {
+      givenToGo = prompt('Enter To Go');
+    }
+    if (givenToGo <= 0) {
+      givenToGo = 10;
+      enterBallOn();
+      setDown(1);
+    }
+    setToGo(givenToGo);
+  }
 
   useEffect(() => {
     let myInterval = setInterval(() => {
@@ -52,11 +75,11 @@ function App() {
           </div>
           <div className="toGo">
             <h3 className="toGo__title">To Go</h3>
-            <div className="toGo__value">7</div>
+            <div className="toGo__value">{ toGo }</div>
           </div>
           <div className="ballOn">
             <h3 className="ballOn__title">Ball on</h3>
-            <div className="ballOn__value">21</div>
+            <div className="ballOn__value">{ ballOn }</div>
           </div>
           <div className="quarter">
             <h3 className="quarter__title">Quarter</h3>
@@ -72,12 +95,12 @@ function App() {
           <button onClick={() => { setLionScore(lionScore - lionScore)}} className="reset__button">Reset Home</button>
         </div>
         <div className="homeButtons">
-          <button onClick={() => { setDown(down === 3 ? 1 : down + 1) }} className="reset__button">Add Down</button>
-          <button onClick={() => { setDown(1) }} className="reset__button">Reset Down</button>
+          <button onClick={() => { setDown(down === 3 ? 1 : down + 1); setTimer(false); enterToGo(); enterBallOn(); }} className="reset__button">Add Down</button>
+          <button onClick={() => { setDown(1); setTimer(false); enterBallOn(); }} className="reset__button">Reset Down</button>
         </div>
         <div className="homeButtons">
           <button onClick={() => { setTimer(timer === false ? true : false) }} className="reset__button">Start/Stop</button>
-          <button onClick={() => { setQuarter(1) }} className="reset__button">Reset Quarter</button>
+          <button onClick={() => { setQuarter(1); setTimer(false); }} className="reset__button">Reset Quarter</button>
         </div>
         <div className="awayButtons">
           <button onClick={() => { setTigerScore(tigerScore + 7)}} className="awayButtons__touchdown">Away Touchdown</button>
